@@ -57,8 +57,7 @@ const Login = () => {
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
             <Shield className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="font-display text-3xl font-bold mb-2 uppercase tracking-widest text-primary">Moses Musah</h1>
-          <p className="text-muted-foreground text-sm">Secure Management Portal</p>
+          <p className="text-muted-foreground text-sm uppercase tracking-widest font-medium">Secure Portal</p>
         </div>
 
         <div className="bg-gradient-card border border-border rounded-2xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.3)] backdrop-blur-sm">
