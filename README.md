@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# Event Showcase Hub
 
 TODO: Document your project here
