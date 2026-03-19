@@ -14,9 +14,9 @@ export function GalleryPreview() {
     offset: ["start end", "end start"]
   });
 
-  // Transform values: scroll down move left, scroll up move right
-  const x1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  // Increased speed by using larger transform range
+  const x1 = useTransform(scrollYProgress, [0, 1], [400, -400]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [-400, 400]);
 
   const row1 = featured.slice(0, 4);
   const row2 = featured.slice(4, 8);
