@@ -31,7 +31,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="text-sm font-medium">hello@framelight.studio</p>
+                  <p className="text-sm font-medium">hello@mosesmusah.events</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -40,7 +40,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Phone</p>
-                  <p className="text-sm font-medium">+234 800 FRAME 00</p>
+                  <p className="text-sm font-medium">+254 700 000 000</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -49,7 +49,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="text-sm font-medium">Lagos, Nigeria</p>
+                  <p className="text-sm font-medium">Nairobi, Kenya</p>
                 </div>
               </div>
             </div>
