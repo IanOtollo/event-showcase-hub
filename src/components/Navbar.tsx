@@ -82,8 +82,23 @@ export function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button onClick={() => setOpen(!open)} className="md:hidden text-foreground">
-          {open ? <X size={24} /> : <Menu size={24} />}
+        <button 
+          onClick={() => setOpen(!open)} 
+          className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none"
+          aria-label="Toggle Menu"
+        >
+          <motion.span
+            animate={open ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+            className="w-6 h-0.5 bg-primary rounded-full origin-center transition-colors"
+          />
+          <motion.span
+            animate={open ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
+            className="w-6 h-0.5 bg-primary rounded-full transition-all"
+          />
+          <motion.span
+            animate={open ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+            className="w-6 h-0.5 bg-primary rounded-full origin-center transition-colors"
+          />
         </button>
       </div>
 
@@ -91,62 +106,92 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-b border-border overflow-hidden"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-2xl md:hidden flex flex-col items-center justify-center p-8 gap-8"
           >
-            <div className="flex flex-col px-4 py-4 gap-4">
-              {navLinks.map((link) => (
-                link.path.startsWith("/#") ? (
+            {navLinks.map((link, i) => (
+              <motion.div
+                key={link.path}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.1 }}
+              >
+                {link.path.startsWith("/#") ? (
                   <a
-                    key={link.path}
                     href={link.path}
                     onClick={() => setOpen(false)}
-                    className="text-sm font-medium tracking-wide uppercase text-muted-foreground hover:text-primary"
+                    className="text-3xl font-display font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </a>
                 ) : (
                   <Link
-                    key={link.path}
                     to={link.path}
                     onClick={() => setOpen(false)}
-                    className="text-sm font-medium tracking-wide uppercase text-muted-foreground hover:text-primary"
+                    className={`text-3xl font-display font-bold tracking-widest transition-colors ${
+                      location.pathname === link.path ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    }`}
                   >
                     {link.label}
                   </Link>
-                )
-              ))}
-              
-              {user ? (
-                <div className="pt-4 border-t border-border flex flex-col gap-4">
-                  <Link
-                    to="/admin"
-                    onClick={() => setOpen(false)}
-                    className="text-sm font-bold tracking-wide uppercase text-primary flex items-center gap-2"
-                  >
-                    <ShieldCheck className="h-4 w-4" /> Admin ({user.role})
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setOpen(false);
-                    }}
-                    className="text-sm font-medium tracking-wide uppercase text-destructive flex items-center gap-2 text-left"
-                  >
-                    <LogOut className="h-4 w-4" /> Logout
-                  </button>
-                </div>
-              ) : (
+                )}
+              </motion.div>
+            ))}
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="w-full h-px bg-border max-w-[100px]"
+            />
+
+            {user ? (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="flex flex-col items-center gap-6"
+              >
                 <Link
                   to="/admin"
                   onClick={() => setOpen(false)}
-                  className="text-sm font-medium tracking-wide uppercase text-muted-foreground hover:text-primary"
+                  className="text-lg font-bold tracking-[0.2em] text-primary flex items-center gap-2"
                 >
-                  Admin
+                  <ShieldCheck className="h-5 w-5" /> ADMIN • {user.role.toUpperCase()}
                 </Link>
-              )}
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setOpen(false);
+                  }}
+                  className="text-lg font-bold tracking-[0.2em] text-destructive flex items-center gap-2"
+                >
+                  <LogOut className="h-5 w-5" /> LOGOUT
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <Link
+                  to="/admin"
+                  onClick={() => setOpen(false)}
+                  className="text-2xl font-display font-bold tracking-widest text-muted-foreground hover:text-primary"
+                >
+                  ADMIN
+                </Link>
+              </motion.div>
+            )}
+
+            <div className="absolute bottom-12 text-center">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.4em] font-medium opacity-60">
+                Moses Musah Events • Nairobi
+              </p>
             </div>
           </motion.div>
         )}
