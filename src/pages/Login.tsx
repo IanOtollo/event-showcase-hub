@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Shield, Lock, Mail, Chrome } from "lucide-react";
+import { Shield, Lock, Mail, Chrome, ArrowLeft } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -47,7 +48,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative">
+      <Link 
+        to="/" 
+        className="absolute top-8 left-8 flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+      >
+        <ArrowLeft className="h-4 w-4" /> Go Back
+      </Link>
+      
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
