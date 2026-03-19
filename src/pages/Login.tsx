@@ -71,7 +71,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@mosesmusah.com"
+                placeholder="john.smith@example.com"
                 className="bg-secondary/50 border-border focus:border-primary transition-all h-11"
               />
             </div>
@@ -119,12 +119,6 @@ const Login = () => {
             </div>
             Sign in with Google
           </Button>
-          
-          <div className="mt-8 pt-6 border-t border-border/50 text-center">
-            <p className="text-[9px] text-muted-foreground uppercase tracking-[0.3em] font-medium opacity-60">
-              Secured Enterprise Intelligence • Nairobi, Kenya
-            </p>
-          </div>
         </div>
       </motion.div>
     </div>
