@@ -10,8 +10,12 @@ export interface User {
 const STORAGE_KEY = "moses_musah_auth_user";
 
 export const auth = {
-  login: (name: string, role: Role): User => {
-    const user: User = { id: Math.random().toString(36).substr(2, 9), name, role };
+  login: (email: string, role: Role): User => {
+    const user: User = { 
+      id: Math.random().toString(36).substr(2, 9), 
+      name: email.split("@")[0], 
+      role 
+    };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     return user;
   },

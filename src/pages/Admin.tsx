@@ -9,10 +9,25 @@ import { Navbar } from "@/components/Navbar";
 import { galleryItems, categories, type GalleryItem } from "@/data/galleryData";
 import { auth } from "@/lib/auth";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const Admin = () => {
   const [items] = useState<GalleryItem[]>(galleryItems);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [newEntry, setNewEntry] = useState({
+    title: "",
+    category: "" as EventCategory,
+    location: "",
+    eventType: ""
+  });
+  
   const user = auth.getUser();
   const isAdmin = user?.role === "admin";
   const canEdit = user?.role === "admin" || user?.role === "editor";
@@ -22,6 +37,8 @@ const Admin = () => {
       <Navbar />
 
       <div className="pt-24 pb-12 container mx-auto px-4">
+        {/* ... existing header and stats ... */}
+        
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
@@ -162,11 +179,20 @@ const Admin = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Category</label>
-                    <Input placeholder="e.g. Conference" className="bg-secondary border-border" />
+                    <Select onValueChange={(v) => setNewEntry({...newEntry, category: v as EventCategory})}>
+                      <SelectTrigger className="bg-secondary border-border">
+                        <SelectValue placeholder="Select Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.filter(c => c !== "All").map((cat) => (
+                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Location</label>
-                    <Input placeholder="e.g. Lagos, Nigeria" className="bg-secondary border-border" />
+                    <Input placeholder="e.g. Nairobi, Kenya" className="bg-secondary border-border" />
                   </div>
                 </div>
                 <div>
