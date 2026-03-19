@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Image, Video, MapPin, Tag, Trash2, Upload, LayoutGrid, List, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Plus, Image, Video, MapPin, Tag, Trash2, Upload, LayoutGrid, List, Eye, Settings, Shield } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/Navbar";
 import { galleryItems, categories, type GalleryItem } from "@/data/galleryData";
+import { auth } from "@/lib/auth";
 
 const Admin = () => {
   const [items] = useState<GalleryItem[]>(galleryItems);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const user = auth.getUser();
+  const isAdmin = user?.role === "admin";
+  const canEdit = user?.role === "admin" || user?.role === "editor";
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,16 +25,21 @@ const Admin = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <p className="text-primary text-sm uppercase tracking-[0.25em] mb-1 font-medium">Dashboard</p>
+            <div className="flex items-center gap-2 mb-1">
+              <Shield className="h-4 w-4 text-primary" />
+              <p className="text-primary text-sm uppercase tracking-[0.25em] font-medium">Dashboard • {user?.role}</p>
+            </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold">Admin Panel</h1>
           </div>
           <div className="flex gap-3">
             <Button asChild variant="outline" size="sm" className="border-border text-foreground">
               <Link to="/portfolio"><Eye className="mr-2 h-4 w-4" />View Portfolio</Link>
             </Button>
-            <Button size="sm" onClick={() => setShowUploadModal(true)} className="bg-primary text-primary-foreground hover:bg-gold-dark">
-              <Plus className="mr-2 h-4 w-4" />Upload New
-            </Button>
+            {canEdit && (
+              <Button size="sm" onClick={() => setShowUploadModal(true)} className="bg-primary text-primary-foreground hover:bg-gold-dark">
+                <Plus className="mr-2 h-4 w-4" />Upload New
+              </Button>
+            )}
           </div>
         </div>
 
@@ -84,7 +93,9 @@ const Admin = () => {
                   <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <Button size="sm" variant="outline" className="text-xs border-foreground/30 text-foreground"><Eye className="mr-1 h-3 w-3" />View</Button>
-                    <Button size="sm" variant="destructive" className="text-xs"><Trash2 className="mr-1 h-3 w-3" />Delete</Button>
+                    {isAdmin && (
+                      <Button size="sm" variant="destructive" className="text-xs"><Trash2 className="mr-1 h-3 w-3" />Delete</Button>
+                    )}
                   </div>
                 </div>
                 <div className="p-4">
@@ -117,7 +128,9 @@ const Admin = () => {
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground"><Eye className="h-4 w-4" /></Button>
-                  <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                  {isAdmin && (
+                    <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                  )}
                 </div>
               </div>
             ))}

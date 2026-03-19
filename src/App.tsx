@@ -6,7 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
 import Admin from "./pages/Admin.tsx";
+import Login from "./pages/Login.tsx";
+import EventPlanning from "./pages/services/EventPlanning.tsx";
+import VideoCoverage from "./pages/services/VideoCoverage.tsx";
+import Livestreaming from "./pages/services/Livestreaming.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +24,18 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/services/event-planning" element={<EventPlanning />} />
+          <Route path="/services/video-coverage" element={<VideoCoverage />} />
+          <Route path="/services/livestreaming" element={<Livestreaming />} />
+          <Route path="/login" element={<Login />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute requiredRoles={["admin", "editor"]}>
+                <Admin />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
