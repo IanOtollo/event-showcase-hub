@@ -1,75 +1,87 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, MapPin, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { galleryItems } from "@/data/galleryData";
 
 export function GalleryPreview() {
-  const featured = galleryItems.slice(0, 4);
+  const featured = galleryItems.slice(0, 8); // Take more items for the rows
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Transform values: scroll down move left, scroll up move right
+  const x1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+
+  const row1 = featured.slice(0, 4);
+  const row2 = featured.slice(4, 8);
 
   return (
-    <section className="py-24 md:py-32">
-      <div className="container mx-auto px-4">
+    <section ref={containerRef} className="py-24 md:py-32 overflow-hidden bg-background">
+      <div className="container mx-auto px-4 mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex items-end justify-between mb-12"
+          className="flex items-end justify-between"
         >
           <div>
-            <p className="text-primary text-sm uppercase tracking-[0.25em] mb-3 font-medium">Featured Work</p>
+            <p className="text-primary text-sm uppercase tracking-[0.25em] mb-3 font-medium">Bespoke Production</p>
             <h2 className="font-display text-3xl md:text-5xl font-bold">
-              Recent <span className="text-gradient-gold italic">Projects</span>
+              Immersive <span className="text-gradient-gold italic">Visuals</span>
             </h2>
           </div>
-          <Button asChild variant="ghost" className="hidden md:flex text-primary hover:text-gold-light">
-            <Link to="/portfolio">
-              View All <ArrowRight className="ml-2 h-4 w-4" />
+          <Button asChild variant="ghost" className="hidden md:flex text-primary hover:text-gold-light group">
+            <Link to="/portfolio" className="flex items-center">
+              View All <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
         </motion.div>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {featured.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative aspect-[3/4] rounded-lg overflow-hidden cursor-pointer"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-              {item.mediaType === "Video" && (
-                <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-primary/80 flex items-center justify-center">
-                  <Play className="h-3 w-3 text-primary-foreground fill-current" />
-                </div>
-              )}
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                <p className="text-primary text-xs uppercase tracking-widest mb-1">{item.category}</p>
-                <h3 className="font-display text-base font-semibold leading-tight mb-1">{item.title}</h3>
-                <div className="flex items-center gap-1 text-muted-foreground text-xs">
-                  <MapPin className="h-3 w-3" />
-                  {item.location}
-                </div>
+      <div className="space-y-12">
+        {/* Row 1 - Moves Left on Scroll Down */}
+        <motion.div style={{ x: x1 }} className="flex gap-6 whitespace-nowrap px-4">
+          {row1.map((item) => (
+            <div key={item.id} className="relative w-[300px] md:w-[450px] aspect-[16/10] rounded-2xl overflow-hidden shrink-0 group shadow-2xl">
+              <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute bottom-6 left-6 pr-6 pointer-events-none">
+                <span className="text-xs text-primary font-bold uppercase tracking-widest mb-1 block">{item.category}</span>
+                <h3 className="text-white font-display text-xl font-bold mb-1 leading-tight">{item.title}</h3>
+                <p className="text-white/60 text-[10px] uppercase tracking-wider flex items-center gap-1"><MapPin className="h-3 w-3" />{item.location}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="md:hidden text-center mt-8">
-          <Button asChild variant="outline" className="border-primary/30 text-primary">
-            <Link to="/portfolio">
-              View All Projects <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
+        {/* Row 2 - Moves Right on Scroll Down */}
+        <motion.div style={{ x: x2 }} className="flex gap-6 whitespace-nowrap px-4 md:pl-[200px]">
+          {row2.map((item) => (
+            <div key={item.id} className="relative w-[300px] md:w-[450px] aspect-[16/10] rounded-2xl overflow-hidden shrink-0 group shadow-2xl">
+              <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute bottom-6 left-6 pr-6 pointer-events-none">
+                <span className="text-xs text-primary font-bold uppercase tracking-widest mb-1 block">{item.category}</span>
+                <h3 className="text-white font-display text-xl font-bold mb-1 leading-tight">{item.title}</h3>
+                <p className="text-white/60 text-[10px] uppercase tracking-wider flex items-center gap-1"><MapPin className="h-3 w-3" />{item.location}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      <div className="container mx-auto px-4 mt-20 md:hidden">
+        <Button asChild variant="outline" className="w-full border-primary/30 text-primary">
+          <Link to="/portfolio" className="flex items-center justify-center">
+            View All Projects <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </section>
   );

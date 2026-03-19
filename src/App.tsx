@@ -12,6 +12,7 @@ import VideoCoverage from "./pages/services/VideoCoverage.tsx";
 import Livestreaming from "./pages/services/Livestreaming.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import { ScrollToHash } from "./components/ScrollToHash.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToHash />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/portfolio" element={<Portfolio />} />
