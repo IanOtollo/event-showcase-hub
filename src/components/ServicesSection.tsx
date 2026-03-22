@@ -44,31 +44,39 @@ export function ServicesSection() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, i) => (
-            <Link to={service.path} key={service.title} className="block">
+            <Link to={service.path} key={service.title} className="block group">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
-                className="bg-gradient-card rounded-lg p-8 border border-border hover:border-gold-subtle h-full transition-all duration-500 group"
+                whileHover={{ y: -10 }}
+                className="bg-gradient-card rounded-2xl p-10 border border-border group-hover:border-primary/30 h-full transition-all duration-500 relative overflow-hidden"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-display text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">{service.description}</p>
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-secondary-foreground">
-                      <ChevronRight className="h-3 w-3 text-primary" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <div className="text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                  Learn More <ChevronRight className="h-3 w-3" />
+                {/* Subtle Glow Overlay */}
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10 text-left">
+                  <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 rotate-3 group-hover:rotate-0">
+                    <service.icon className="h-7 w-7" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold mb-4 tracking-tight">{service.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-8 opacity-80 group-hover:opacity-100">
+                    {service.description}
+                  </p>
+                  <ul className="space-y-3 mb-10">
+                    {service.features.map((f) => (
+                      <li key={f} className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="text-primary text-[10px] font-bold uppercase tracking-[0.3em] flex items-center gap-2 group-hover:gap-4 transition-all">
+                    Explore Vertical <ChevronRight className="h-3 w-3" />
+                  </div>
                 </div>
               </motion.div>
             </Link>

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { WhatsAppFloat } from "./components/WhatsAppFloat";
 import Index from "./pages/Index.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
 import Admin from "./pages/Admin.tsx";
@@ -12,6 +13,7 @@ import VideoCoverage from "./pages/services/VideoCoverage.tsx";
 import Livestreaming from "./pages/services/Livestreaming.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.tsx";
+import { SeasonalEffects } from "./components/SeasonalEffects";
 import { ScrollToHash } from "./components/ScrollToHash.tsx";
 
 const queryClient = new QueryClient();
@@ -21,6 +23,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <WhatsAppFloat />
+      <SeasonalEffects />
       <BrowserRouter>
         <ScrollToHash />
         <Routes>

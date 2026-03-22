@@ -5,14 +5,20 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { galleryItems, categories, type EventCategory, type GalleryItem } from "@/data/galleryData";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState<EventCategory>("All");
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
 
   const filtered = activeCategory === "All"
     ? galleryItems
     : galleryItems.filter((item) => item.category === activeCategory);
+
+  const handleImageLoad = (id: string) => {
+    setLoadedImages(prev => ({ ...prev, [id]: true }));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -33,16 +39,16 @@ const Portfolio = () => {
       </section>
 
       {/* Filters */}
-      <div className="container mx-auto px-4 mb-10">
-        <div className="flex flex-wrap gap-2">
+      <div className="container mx-auto px-4 mb-16">
+        <div className="flex flex-wrap gap-3">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider transition-all ${
+              className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-300 border ${
                 activeCategory === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                  ? "bg-primary text-primary-foreground border-primary shadow-gold"
+                  : "bg-white/5 text-muted-foreground border-white/5 hover:border-white/20 hover:bg-white/10 hover:text-foreground"
               }`}
             >
               {cat}
@@ -64,12 +70,14 @@ const Portfolio = () => {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
                 onClick={() => setSelectedItem(item)}
-                className="group relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer"
+                className="group relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer bg-muted"
               >
+                {!loadedImages[item.id] && <Skeleton className="absolute inset-0 z-10 w-full h-full" />}
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  onLoad={() => handleImageLoad(item.id)}
+                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${loadedImages[item.id] ? 'opacity-100' : 'opacity-0'}`}
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity" />
