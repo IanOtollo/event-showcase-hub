@@ -29,13 +29,13 @@ export function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-2xl border-b border-white/5 transition-all duration-300">
-      <div className="container mx-auto flex items-center justify-between h-20 px-4">
+      <div className="container mx-auto flex items-center justify-between h-20 px-4 relative">
         <Link to="/" className="font-display text-2xl font-bold tracking-tighter text-primary">
           MOSES MUSAH
         </Link>
 
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Center Desktop Links */}
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {navLinks.map((link) => (
             link.path.startsWith("/#") ? (
               <a
@@ -57,9 +57,12 @@ export function Navbar() {
               </Link>
             )
           ))}
-          
+        </div>
+        
+        {/* Right Desktop Utils */}
+        <div className="hidden md:flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-4 pl-4 border-l border-border">
+            <div className="flex items-center gap-4 border-border">
               <Link to="/admin" className="text-primary flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
                 <ShieldCheck className="h-4 w-4" /> {user.role}
               </Link>
@@ -80,7 +83,6 @@ export function Navbar() {
             </Link>
           )}
         </div>
-
         {/* Mobile toggle */}
         <button 
           onClick={() => setOpen(!open)} 
